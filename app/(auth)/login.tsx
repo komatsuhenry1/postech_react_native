@@ -1,13 +1,16 @@
-import { Text, View, TextInput, TouchableOpacity, StyleSheet, Alert, Pressable } from "react-native";
+import { login } from "@/services/api";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { login } from "@/services/api";
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function Login() {
     const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
+    const storage = AsyncStorage;
 
     async function handleLogin() {
         if (!email || !password) {
@@ -18,12 +21,24 @@ export default function Login() {
         try {
             setLoading(true);
 
-            const user = await login(email, password);
+            const { data: user, statusCode, role } = await login(email, password);
 
-            console.log("Login OK:", user);
+            if (statusCode === 200) {
+                console.log("role: ", role);
 
-            // depois:
-            // redirect por role
+                if (role === "user"){
+                    await storage.setItem("role", JSON.stringify(role));
+                    router.push("/(user)");
+                    const keys = await AsyncStorage.getAllKeys();
+                    const items = await AsyncStorage.multiGet(keys);
+                    console.log(items);
+                } else if (role === "admin"){
+                    await storage.setItem("role", JSON.stringify(role));
+                    router.push("/(admin)/admin-menu"); 
+                }
+            } else {
+                Alert.alert("Erro", "Email ou senha inválidos");
+            }
         } catch (error) {
             Alert.alert("Erro", "Email ou senha inválidos");
         } finally {
@@ -61,9 +76,9 @@ export default function Login() {
             </View>
 
             <View style={styles.buttonContainer}>
-                <Pressable onPress={handleLogin}>
-                    <Text>Entrar</Text>
-                </Pressable>
+                <TouchableOpacity onPress={handleLogin} style={styles.buttonPrimary} disabled={loading}>
+                    <Text style={styles.buttonTextPrimary}>{loading ? "Acessando..." : "Entrar"}</Text>
+                </TouchableOpacity>
 
                 <TouchableOpacity onPress={() => router.back()} style={styles.linkButton}>
                     <Text style={styles.linkText}>Voltar ao menu</Text>

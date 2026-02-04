@@ -8,7 +8,7 @@ export default function Posts() {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Button title="Back" onPress={() => router.back()} />
-            <Text> GET ALL  POSTS PAGE</Text>
+            <Text> ADMIN POSTS CRUD PAGE</Text>
         </View>
     );
 }

@@ -16,7 +16,13 @@ export type LoginResponse = {
   username: string;
 };
 
-export async function login(email: string, password: string): Promise<LoginResponse> {
+export type ApiResponse<T> = {
+  data: T;
+  statusCode: number;
+  role: string;
+};
+
+export async function login(email: string, password: string): Promise<ApiResponse<LoginResponse>> {
   const response = await fetch(`${API_URL}/auth/login`, {
     method: "POST",
     headers: {
@@ -28,9 +34,34 @@ export async function login(email: string, password: string): Promise<LoginRespo
     }),
   });
 
-  if (!response.ok) {
-    throw new Error("Falha no login");
-  }
+  const data = await response.json();
 
-  return response.json();
+  return {
+    data,
+    statusCode: response.status,
+    role: data.role,
+  };
+}
+
+export async function register(name: string, email: string, username: string, password: string): Promise<ApiResponse<LoginResponse>> {
+  const response = await fetch(`${API_URL}/auth/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name,
+      email,
+      username,
+      password,
+    }),
+  });
+
+  const data = await response.json();
+
+  return {
+    data,
+    statusCode: response.status,
+    role: data.role,
+  };
 }

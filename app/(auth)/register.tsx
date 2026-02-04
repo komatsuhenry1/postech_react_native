@@ -1,32 +1,42 @@
-import { Text, View, TextInput, TouchableOpacity, StyleSheet } from "react-native";
-import { useState } from "react";
+import { register } from "@/services/api";
 import { useRouter } from "expo-router";
+import { useState } from "react";
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function Register() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const router = useRouter();
 
-    function sendRegister() {
-        console.log(name, email, password);
-    }
-
-    const handleRegister = () => {
-        const user = {
-            name,
-            email,
-            username,
-            password,
-            role: "USER"
+    async function handleRegister() {
+        if (!email || !password) {
+            Alert.alert("Erro", "Preencha email e senha");
+            return;
         }
 
-        sendRegister();
-        router.back();
-    }
+        try {
+            setLoading(true);
 
+            const response = await register(name, email, username, password);
+
+            if (response.statusCode === 200 || response.statusCode === 201) {
+                Alert.alert("Sucesso", "Registro realizado com sucesso, faça login.");
+                router.push("/(auth)/login");
+            } else {
+                Alert.alert("Erro", "Falha no registro");
+            }
+
+            console.log("Response:", response);
+        } catch (error) {
+            Alert.alert("Erro", "Falha no registro");
+        } finally {
+            setLoading(false);
+        }
+    }
     return (
         <View style={styles.container}>
             <Text style={styles.headerTitle}>Primeiro Acesso</Text>
@@ -75,8 +85,8 @@ export default function Register() {
             </View>
 
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.buttonPrimary}>
-                    <Text style={styles.buttonTextPrimary}>Cadastrar</Text>
+                <TouchableOpacity onPress={handleRegister} style={styles.buttonPrimary} disabled={loading}>
+                    <Text style={styles.buttonTextPrimary}>{loading ? "Cadastrando..." : "Cadastrar"}</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={() => router.back()} style={styles.linkButton}>
