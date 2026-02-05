@@ -1,7 +1,8 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, FlatList, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
 import { useRouter } from "expo-router";
-import { getPosts, PostModel } from "@/services/api";
+import { getPosts, PostModel, searchPosts } from "@/services/api";
+import { Screen } from "@/components/Screen";
 
 export default function BlogHomeScreen() {
   const router = useRouter();
@@ -24,14 +25,37 @@ export default function BlogHomeScreen() {
   useEffect(() => {
     load();
   }, []);
+  
+  useEffect(() => {
+  const term = query.trim();
 
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return posts;
-    return posts.filter((p) => p.title.toLowerCase().includes(q));
-  }, [posts, query]);
+  const t = setTimeout(async () => {
+    try {
+      setLoading(true);
+
+      if (!term) {
+        const data = await getPosts();
+        setPosts(data);
+        return;
+      }
+
+      const data = await searchPosts(term);
+      setPosts(data);
+    } catch (e) {
+      // opcional: mostrar alert/log
+      console.log(e);
+      setPosts([]);
+    } finally {
+      setLoading(false);
+    }
+  }, 400); // debounce 400ms
+
+  return () => clearTimeout(t);
+}, [query]);
+
 
   return (
+    <Screen>
     <View style={styles.page}>
       {/* “Top bar” estilo web */}
       <View style={styles.topbar}>
@@ -42,7 +66,7 @@ export default function BlogHomeScreen() {
             <Text style={styles.topLink}>Início</Text>
           </Pressable>
 
-          <Pressable onPress={() => { /* opcional */ }}>
+          <Pressable onPress={() => router.push("/(admin)/posts-painel")}>
             <Text style={styles.topLink}>Publicações</Text>
           </Pressable>
 
@@ -65,7 +89,7 @@ export default function BlogHomeScreen() {
         />
       </View>
 
-      <Text style={styles.countText}>{filtered.length} publicações disponíveis</Text>
+      <Text style={styles.countText}>{posts.length} publicações disponíveis</Text>
 
       {loading ? (
         <View style={styles.loading}>
@@ -73,7 +97,7 @@ export default function BlogHomeScreen() {
         </View>
       ) : (
         <FlatList
-          data={filtered}
+          data={posts}
           keyExtractor={(item) => item.id}
           numColumns={2}
           columnWrapperStyle={{ gap: 14 }}
@@ -99,6 +123,7 @@ export default function BlogHomeScreen() {
         />
       )}
     </View>
+    </Screen>
   );
 }
 

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 import { createPost } from "@/services/api";
+import { Screen } from "@/components/Screen";
 
 
 export default function CreatePostScreen() {
@@ -31,9 +32,13 @@ export default function CreatePostScreen() {
   }
 
   return (
+    <Screen>
     <ScrollView contentContainerStyle={styles.page}>
       <Text style={styles.h1}>Criar Publicação</Text>
       <Text style={styles.subtitle}>Crie uma publicação para o seu blog</Text>
+        <Pressable onPress={() => router.back()} style={styles.backBtn}>
+          <Text style={styles.backText}>← Voltar</Text>
+        </Pressable>
 
       <View style={styles.form}>
         <Text style={styles.label}>Title</Text>
@@ -88,6 +93,7 @@ export default function CreatePostScreen() {
         </TouchableOpacity>
       </View>
     </ScrollView>
+    </Screen>
   );
 }
 
@@ -181,4 +187,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "700",
   },
+  backText: { fontWeight: "800", color: "#111827" },
+  backBtn: { backgroundColor: "#F3F4F6", paddingHorizontal: 10, paddingVertical: 8, borderRadius: 10 },
+  
 });
