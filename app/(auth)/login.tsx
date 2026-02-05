@@ -3,6 +3,7 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Screen } from "@/components/Screen";
 
 
 export default function Login() {
@@ -49,6 +50,7 @@ export default function Login() {
 
 
     return (
+        <Screen>
         <View style={styles.container}>
             <Text style={styles.headerTitle}>Login</Text>
 
@@ -85,6 +87,7 @@ export default function Login() {
                 </TouchableOpacity>
             </View>
         </View>
+        </Screen>
     );
 }
 

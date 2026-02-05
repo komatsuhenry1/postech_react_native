@@ -1,10 +1,12 @@
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
+import { Screen } from "@/components/Screen";
 
 export default function Index() {
   const router = useRouter();
 
   return (
+    <Screen>
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>EduBlog</Text>
@@ -27,6 +29,7 @@ export default function Index() {
         </TouchableOpacity>
       </View>
     </View>
+    </Screen>
   );
 }
 

@@ -2,6 +2,7 @@ import { register } from "@/services/api";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Screen } from "@/components/Screen";
 
 export default function Register() {
     const [name, setName] = useState("");
@@ -38,6 +39,7 @@ export default function Register() {
         }
     }
     return (
+        <Screen>
         <View style={styles.container}>
             <Text style={styles.headerTitle}>Primeiro Acesso</Text>
 
@@ -94,6 +96,7 @@ export default function Register() {
                 </TouchableOpacity>
             </View>
         </View>
+        </Screen>
     );
 }
 

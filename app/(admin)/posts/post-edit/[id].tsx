@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { getPostById, updatePost, PostDetailModel } from "@/services/api";
+import { Screen } from "@/components/Screen";
 
 export default function EditPostScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -51,6 +52,7 @@ export default function EditPostScreen() {
   }
 
   return (
+    <Screen>
     <ScrollView contentContainerStyle={styles.page}>
       <Text style={styles.h1}>Editar Publicação</Text>
       <Text style={styles.subtitle}>Edite uma publicação para o seu blog</Text>
@@ -117,6 +119,7 @@ export default function EditPostScreen() {
         </View>
       )}
     </ScrollView>
+    </Screen>
   );
 }
 

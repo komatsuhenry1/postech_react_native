@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { getPostById, PostDetailModel } from "@/services/api";
+import { Screen } from "@/components/Screen";
 
 export default function PostDetailsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -30,6 +31,7 @@ export default function PostDetailsScreen() {
   }, [id]);
 
   return (
+    <Screen>
     <View style={styles.page}>
       <View style={styles.topbar}>
         <Pressable onPress={() => router.back()} style={styles.backBtn}>
@@ -86,6 +88,7 @@ export default function PostDetailsScreen() {
         </View>
       )}
     </View>
+    </Screen>
   );
 }
 
