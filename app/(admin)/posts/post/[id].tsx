@@ -40,7 +40,7 @@ export default function PostDetailsScreen() {
   return (
     <Screen>
       <View style={styles.page}>
-        <View style={styles.topbar}>
+        <View style={styles.header}>
           <Pressable onPress={() => router.back()} style={styles.backBtn}>
             <Text style={styles.backText}>← Voltar</Text>
           </Pressable>
@@ -112,16 +112,13 @@ function formatDate(iso: string) {
 const styles = StyleSheet.create({
   page: { flex: 1, backgroundColor: "#fff", padding: 18 },
 
-  topbar: {
-    borderWidth: 1,
-    borderColor: "#E5E7EB",
-    borderRadius: 14,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+  header: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 14,
+    marginVertical: 10,
+    marginHorizontal: 10,
   },
   brand: { fontSize: 16, fontWeight: "900", color: "#2563EB" },
 

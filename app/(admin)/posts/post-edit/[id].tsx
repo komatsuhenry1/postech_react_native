@@ -1,8 +1,8 @@
+import { Screen } from "@/components/Screen";
+import { getPostById, PostDetailModel, updatePost } from "@/services/api";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { getPostById, updatePost, PostDetailModel } from "@/services/api";
-import { Screen } from "@/components/Screen";
 
 export default function EditPostScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -53,72 +53,77 @@ export default function EditPostScreen() {
 
   return (
     <Screen>
-    <ScrollView contentContainerStyle={styles.page}>
-      <Text style={styles.h1}>Editar Publicação</Text>
-      <Text style={styles.subtitle}>Edite uma publicação para o seu blog</Text>
-
-      {loading ? (
-        <View style={styles.center}>
-          <ActivityIndicator />
+      <ScrollView contentContainerStyle={styles.page}>
+        <View style={styles.header}>
+          <Pressable onPress={() => router.back()} style={styles.backBtn}>
+            <Text style={styles.backText}>← Voltar</Text>
+          </Pressable>
+          <Text style={styles.h1}>Editar Publicação</Text>
         </View>
-      ) : (
-        <View style={styles.grid}>
-          {/* coluna esquerda */}
-          <View style={styles.left}>
-            <Text style={styles.label}>Título</Text>
-            <TextInput value={title} onChangeText={setTitle} style={styles.input} />
+        <Text style={styles.subtitle}>Edite uma publicação para o seu blog</Text>
 
-            <Text style={[styles.label, { marginTop: 14 }]}>Conteúdo</Text>
-            <TextInput
-              value={content}
-              onChangeText={setContent}
-              style={styles.textarea}
-              multiline
-              textAlignVertical="top"
-            />
+        {loading ? (
+          <View style={styles.center}>
+            <ActivityIndicator />
           </View>
+        ) : (
+          <View style={styles.grid}>
+            {/* coluna esquerda */}
+            <View style={styles.left}>
+              <Text style={styles.label}>Título</Text>
+              <TextInput value={title} onChangeText={setTitle} style={styles.input} />
 
-          {/* coluna direita (cards) */}
-          <View style={styles.right}>
-            <View style={styles.card}>
-              <Text style={styles.cardTitle}>Ações</Text>
-
-              <Pressable style={[styles.primaryBtn, loading && styles.btnDisabled]} onPress={handleSave} disabled={loading}>
-                <Text style={styles.primaryBtnText}>💾 Salvar alterações</Text>
-              </Pressable>
-
-              <Pressable style={styles.secondaryBtn} onPress={() => router.back()}>
-                <Text style={styles.secondaryBtnText}>✕ Cancelar</Text>
-              </Pressable>
+              <Text style={[styles.label, { marginTop: 14 }]}>Conteúdo</Text>
+              <TextInput
+                value={content}
+                onChangeText={setContent}
+                style={styles.textarea}
+                multiline
+                textAlignVertical="top"
+              />
             </View>
 
-            <View style={styles.card}>
-              <Text style={styles.cardTitle}>Detalhes</Text>
+            {/* coluna direita (cards) */}
+            <View style={styles.right}>
+              <View style={styles.card}>
+                <Text style={styles.cardTitle}>Ações</Text>
 
-              <View style={styles.detailRow}>
-                <Text style={styles.detailKey}>Autor:</Text>
-                <Text style={styles.detailVal}>{post?.author ?? "-"}</Text>
+                <Pressable style={[styles.primaryBtn, loading && styles.btnDisabled]} onPress={handleSave} disabled={loading}>
+                  <Text style={styles.primaryBtnText}>💾 Salvar alterações</Text>
+                </Pressable>
+
+                <Pressable style={styles.secondaryBtn} onPress={() => router.back()}>
+                  <Text style={styles.secondaryBtnText}>✕ Cancelar</Text>
+                </Pressable>
               </View>
 
-              <View style={styles.detailRow}>
-                <Text style={styles.detailKey}>Status:</Text>
-                <Text style={styles.detailVal}>{post?.status ?? "-"}</Text>
-              </View>
+              <View style={styles.card}>
+                <Text style={styles.cardTitle}>Detalhes</Text>
 
-              <View style={styles.detailRow}>
-                <Text style={styles.detailKey}>Data de atualização:</Text>
-                <Text style={styles.detailVal}>{post ? formatDate(post.updated_at) : "-"}</Text>
-              </View>
+                <View style={styles.detailRow}>
+                  <Text style={styles.detailKey}>Autor:</Text>
+                  <Text style={styles.detailVal}>{post?.author ?? "-"}</Text>
+                </View>
 
-              <View style={styles.detailRow}>
-                <Text style={styles.detailKey}>Data de criação:</Text>
-                <Text style={styles.detailVal}>{post ? formatDate(post.created_at) : "-"}</Text>
+                <View style={styles.detailRow}>
+                  <Text style={styles.detailKey}>Status:</Text>
+                  <Text style={styles.detailVal}>{post?.status ?? "-"}</Text>
+                </View>
+
+                <View style={styles.detailRow}>
+                  <Text style={styles.detailKey}>Data de atualização:</Text>
+                  <Text style={styles.detailVal}>{post ? formatDate(post.updated_at) : "-"}</Text>
+                </View>
+
+                <View style={styles.detailRow}>
+                  <Text style={styles.detailKey}>Data de criação:</Text>
+                  <Text style={styles.detailVal}>{post ? formatDate(post.created_at) : "-"}</Text>
+                </View>
               </View>
             </View>
           </View>
-        </View>
-      )}
-    </ScrollView>
+        )}
+      </ScrollView>
     </Screen>
   );
 }
@@ -135,6 +140,18 @@ const styles = StyleSheet.create({
   page: { padding: 18, backgroundColor: "#fff", flexGrow: 1 },
   h1: { fontSize: 34, fontWeight: "900", color: "#2563EB" },
   subtitle: { marginTop: 6, color: "#6B7280", marginBottom: 16 },
+
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 14,
+    marginVertical: 10,
+    marginHorizontal: 10,
+  },
+  backBtn: { backgroundColor: "#F3F4F6", paddingHorizontal: 10, paddingVertical: 8, borderRadius: 10 },
+  backText: { fontWeight: "bold", color: "#333" },
+
   center: { paddingVertical: 40, alignItems: "center" },
 
   // “grid” responsivo: no mobile fica uma coluna, mas a estética se mantém

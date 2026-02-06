@@ -158,7 +158,7 @@ export default function PostsPainelScreen() {
                 <View style={styles.actionsContainer}>
                   <Pressable
                     style={[styles.actionBtn, styles.viewBtn]}
-                    onPress={() => router.push(`/post/${item.id}`)}
+                    onPress={() => router.push(`/posts/post/${item.id}`)}
                   >
                     <Text style={styles.actionBtnText}>👁️</Text>
                   </Pressable>
