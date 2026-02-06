@@ -110,6 +110,27 @@ export async function getUserById(id: string): Promise<LoginResponse> {
     throw new Error(`GET /user/${id} falhou (${response.status}): ${text}`);
   }
 
+  const data = await response.json();
+  if (Array.isArray(data)) {
+    return data[0];
+  }
+  return data;
+}
+
+export async function getAllUsers(): Promise<LoginResponse[]> {
+  const role = await AsyncStorage.getItem("role");
+  const response = await fetch(`${API_URL}/user/`, {
+    headers: {
+      "Content-Type": "application/json",
+      role: String(role),
+    },
+  });
+
+  if (!response.ok) {
+    const text = await response.text().catch(() => "");
+    throw new Error(`GET /user/ falhou (${response.status}): ${text}`);
+  }
+
   return response.json();
 }
 

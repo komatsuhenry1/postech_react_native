@@ -4,7 +4,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 
-export default function EditTeacherScreen() {
+export default function EditStudentScreen() {
     const { id } = useLocalSearchParams<{ id: string }>();
     const router = useRouter();
 
@@ -27,11 +27,19 @@ export default function EditTeacherScreen() {
             setName(data.name);
             setEmail(data.email);
             setUsername(data.username);
-            // Pre-fill password if desired, or leaving it empty implies no change unless user types
-            // Based on user request "carregado os dados", we can try to fill what we have, 
-            // but usually password is not returned. 
-            // However, the user's previous code in edit-student tried to set it.
-            setPassword(data.password || "");
+            // Password is usually not sent back from server, so we leave it empty or handle as needed. 
+            // If the user does not want to change it, they might leave it blank, but the current API 
+            // seems to require all fields in the update. 
+            // For now, we initialize it empty, but if the API expects the *current* password if unchanged, 
+            // this might be an issue. However, usually update endpoints treat empty password as "no change" 
+            // OR we need to ask the user to enter a new password.
+            // Based on the 'edit-teacher' logic provided by the user, we send whatever is in 'password'.
+            // If 'password' is required by the backend to be non-empty, we might have a problem if we don't know it.
+            // But let's follow the 'edit-teacher' pattern. Ideally, the backend should handle optional password updates.
+            // The user's snippet for edit-teacher sends `password.trim()`. 
+            // We will do the same. If the user wants to keep the old password, they might need to re-enter it 
+            // or the backend handles empty strings.
+            setPassword(data.password || ""); // If backend sends it (unlikely/insecure)
         } catch (e: any) {
             Alert.alert("Erro", e.message || "Falha ao carregar usuário");
         } finally {
@@ -49,7 +57,7 @@ export default function EditTeacherScreen() {
             setLoading(true);
             console.log(name.trim(), email.trim(), username.trim(), password.trim());
             await updateUser(String(id), name.trim(), email.trim(), username.trim(), password.trim());
-            Alert.alert("Sucesso", "Dados de professor atualizados com sucesso!");
+            Alert.alert("Sucesso", "Dados de estudante atualizados com sucesso!");
             router.back();
         } catch (e: any) {
             Alert.alert("Erro", e?.message ?? "Não foi possível salvar.");
@@ -60,16 +68,15 @@ export default function EditTeacherScreen() {
 
     return (
         <Screen>
-
-
             <ScrollView contentContainerStyle={styles.page}>
                 <View style={styles.header}>
                     <Pressable onPress={() => router.back()} style={styles.backBtn}>
                         <Text style={styles.backText}>← Voltar</Text>
                     </Pressable>
-                    <Text style={styles.h1}>Editar Professor</Text>
+                    <Text style={styles.h1}>Editar Estudante</Text>
                 </View>
-                <Text style={styles.subtitle}>Atualize os dados do professor</Text>
+                <Text style={styles.subtitle}>Atualize os dados do estudante</Text>
+
                 {loading ? (
                     <ActivityIndicator style={{ marginTop: 40 }} />
                 ) : (
@@ -151,6 +158,18 @@ const styles = StyleSheet.create({
     h1: { fontSize: 34, fontWeight: "900", color: "#2563EB" },
     subtitle: { marginTop: 6, color: "#6B7280", marginBottom: 16 },
 
+    backBtn: { backgroundColor: "#F3F4F6", paddingHorizontal: 10, paddingVertical: 8, borderRadius: 10 },
+    backText: { fontWeight: "bold", color: "#333" },
+
+    header: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        marginBottom: 14,
+        marginVertical: 10,
+        marginHorizontal: 10,
+    },
+
     grid: { gap: 14 },
     left: {},
     right: { gap: 14 },
@@ -172,17 +191,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
     },
 
-    backBtn: { backgroundColor: "#F3F4F6", paddingHorizontal: 10, paddingVertical: 8, borderRadius: 10 },
-    backText: { fontWeight: "bold", color: "#333" },
-
-    header: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        marginBottom: 14,
-        marginVertical: 10,
-        marginHorizontal: 10,
-    },
     card: {
         borderWidth: 1,
         borderColor: "#E5E7EB",
