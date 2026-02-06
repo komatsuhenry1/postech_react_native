@@ -4,6 +4,8 @@ import { useRouter } from "expo-router";
 import React, { useEffect, useMemo, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { MaterialIcons } from "@expo/vector-icons";
+
 
 const STATIC_IMAGES = [
   require("@/assets/images/posts/education_1.png"),
@@ -74,118 +76,15 @@ export default function BlogHomeScreen() {
 
                   <View style={styles.topbarRight}>
                     <Pressable
-                      style={styles.menuBtn}
-                      onPress={() => setShowMenu(!showMenu)}
+                      style={styles.logoutBtn}
+                      onPress={async () => {
+                        await AsyncStorage.removeItem("role");
+                        router.replace("/login");
+                      }}
                     >
-                      <Text style={styles.menuBtnText}>
-                        {showMenu ? "✕" : "☰"}
-                      </Text>
+                      <MaterialIcons name="logout" size={22} color="#ff0000ff" />
                     </Pressable>
                   </View>
-
-                  {showMenu && (
-                    <View style={styles.dropdown}>
-                      <Pressable
-                        style={styles.dropdownItem}
-                        onPress={() => {
-                          setShowMenu(false);
-                          router.push("/(admin)/admin-menu");
-                        }}
-                      >
-                        <Text style={styles.dropdownItemText}>Menu</Text>
-                      </Pressable>
-
-                      <View style={styles.dropdownSeparator} />
-
-                      <Pressable
-                        style={styles.dropdownItem}
-                        onPress={() => {
-                          setShowMenu(false);
-                          router.push("/(admin)/posts/create-post");
-                        }}
-                      >
-                        <Text style={styles.dropdownItemText}>Criar post</Text>
-                      </Pressable>
-
-                      <Pressable
-                        style={styles.dropdownItem}
-                        onPress={() => {
-                          setShowMenu(false);
-                          router.push("/(admin)/posts/posts-painel");
-                        }}
-                      >
-                        <Text style={styles.dropdownItemText}>
-                          Gerenciar Posts
-                        </Text>
-                      </Pressable>
-
-                      <View style={styles.dropdownSeparator} />
-
-                      <Pressable
-                        style={styles.dropdownItem}
-                        onPress={() => {
-                          setShowMenu(false);
-                          router.push("/(admin)/teachers/create-teacher");
-                        }}
-                      >
-                        <Text style={styles.dropdownItemText}>
-                          Criar Professor
-                        </Text>
-                      </Pressable>
-
-                      <Pressable
-                        style={styles.dropdownItem}
-                        onPress={() => {
-                          setShowMenu(false);
-                          router.push("/(admin)/teachers/teachers-painel");
-                        }}
-                      >
-                        <Text style={styles.dropdownItemText}>
-                          Gerenciar Professores
-                        </Text>
-                      </Pressable>
-
-                      <View style={styles.dropdownSeparator} />
-
-                      <Pressable
-                        style={styles.dropdownItem}
-                        onPress={() => {
-                          setShowMenu(false);
-                          router.push("/(admin)/students/create-student");
-                        }}
-                      >
-                        <Text style={styles.dropdownItemText}>
-                          Criar Estudante
-                        </Text>
-                      </Pressable>
-
-                      <Pressable
-                        style={styles.dropdownItem}
-                        onPress={() => {
-                          setShowMenu(false);
-                          router.push("/(admin)/students/students-painel");
-                        }}
-                      >
-                        <Text style={styles.dropdownItemText}>
-                          Gerenciar Estudantes
-                        </Text>
-                      </Pressable>
-
-                      <View style={styles.dropdownSeparator} />
-
-              <Pressable
-                style={styles.dropdownItem}
-                onPress={async () => {
-                  setShowMenu(false);
-                  await AsyncStorage.removeItem("role");
-                  router.push("/(auth)/login");
-                  // exemplo: logout
-                }}
-              >
-                <Text style={styles.dropdownItemTextSair}>Sair</Text>
-              </Pressable>
-            </View>
-          )}
         </View>
 
         <Text style={styles.h1}>Blog Acadêmico</Text>
@@ -268,18 +167,13 @@ const styles = StyleSheet.create({
     width: 40,
     alignItems: "flex-end",
   },
-  menuBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 10,
-    backgroundColor: "#F3F4F6",
-    alignItems: "center",
-    justifyContent: "center",
-  },
   menuBtnText: {
     fontSize: 20,
     color: "#374151",
     fontWeight: "bold",
+  },
+  logoutBtn: {
+    
   },
   dropdown: {
     position: "absolute",

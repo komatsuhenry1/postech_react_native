@@ -29,7 +29,7 @@ export default function Login() {
 
                 if (role === "user"){
                     await storage.setItem("role", JSON.stringify(role));
-                    router.push("/(user)");
+                    router.push("/(user)/user-menu");
                     //printa as chaves (n da pra ver no devtools)
                     const keys = await AsyncStorage.getAllKeys();
                     const items = await AsyncStorage.multiGet(keys);

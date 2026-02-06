@@ -1,12 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { getPostById, PostDetailModel } from "@/services/api";
 import { Screen } from "@/components/Screen";
+import { getPostById, PostDetailModel } from "@/services/api";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from "react-native";
+
+const IMAGES = [
+  require("@/assets/images/posts/education_1.png"),
+  require("@/assets/images/posts/education_2.png"),
+  require("@/assets/images/posts/education_3.png"),
+];
 
 export default function PostDetailsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const imageSource = IMAGES[Number(id) % IMAGES.length] || IMAGES[0];
 
   const [loading, setLoading] = useState(true);
   const [post, setPost] = useState<PostDetailModel | null>(null);
@@ -32,68 +39,68 @@ export default function PostDetailsScreen() {
 
   return (
     <Screen>
-    <View style={styles.page}>
-      <View style={styles.topbar}>
-        <Pressable onPress={() => router.back()} style={styles.backBtn}>
-          <Text style={styles.backText}>← Voltar</Text>
-        </Pressable>
-
-        <Text style={styles.brand}>🎓 EduBlog</Text>
-      </View>
-
-      {loading ? (
-        <View style={styles.center}>
-          <ActivityIndicator />
-        </View>
-      ) : error ? (
-        <View style={styles.center}>
-          <Text style={styles.errorTitle}>Não deu pra carregar 😅</Text>
-          <Text style={styles.errorText}>{error}</Text>
-
-          <Pressable onPress={() => router.replace(`/post/${String(id)}`)} style={styles.retryBtn}>
-            <Text style={styles.retryText}>Tentar de novo</Text>
+      <View style={styles.page}>
+        <View style={styles.topbar}>
+          <Pressable onPress={() => router.back()} style={styles.backBtn}>
+            <Text style={styles.backText}>← Voltar</Text>
           </Pressable>
-        </View>
-      ) : post ? (
-        <View style={styles.card}>
-          <Text style={styles.title}>{post.title}</Text>
 
-          <View style={styles.metaRow}>
-            <Text style={styles.meta}>By {post.author}</Text>
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>{post.status}</Text>
-            </View>
+          <Text style={styles.brand}>🎓 EduBlog</Text>
+        </View>
+
+        {loading ? (
+          <View style={styles.center}>
+            <ActivityIndicator />
           </View>
+        ) : error ? (
+          <View style={styles.center}>
+            <Text style={styles.errorTitle}>Não deu pra carregar 😅</Text>
+            <Text style={styles.errorText}>{error}</Text>
 
-          <Text style={styles.date}>
-            Criado: {formatDate(post.created_at)} • Atualizado: {formatDate(post.updated_at)}
-          </Text>
+            <Pressable onPress={() => router.replace(`/posts/post/${String(id)}`)} style={styles.retryBtn}>
+              <Text style={styles.retryText}>Tentar de novo</Text>
+            </Pressable>
+          </View>
+        ) : post ? (
+          <View style={styles.card}>
+            <Image source={imageSource} style={styles.banner} resizeMode="cover" />
+            <Text style={styles.title}>{post.title}</Text>
 
-          <View style={styles.hr} />
+            <View style={styles.metaRow}>
+              <Text style={styles.meta}>By {post.author}</Text>
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>{post.status}</Text>
+              </View>
+            </View>
 
-          <Text style={styles.content}>{post.content}</Text>
+            <Text style={styles.date}>
+              Criado: {formatDate(post.created_at)} • Atualizado: {formatDate(post.updated_at)}
+            </Text>
 
-          <View style={styles.hr} />
+            <View style={styles.hr} />
 
-          <Text style={styles.sectionTitle}>Comentários</Text>
-          {post.comments?.length ? (
-            <Text style={styles.commentText}>({post.comments.length})</Text>
-          ) : (
-            <Text style={styles.empty}>Nenhum comentário ainda.</Text>
-          )}
-        </View>
-      ) : (
-        <View style={styles.center}>
-          <Text>Post não encontrado.</Text>
-        </View>
-      )}
-    </View>
+            <Text style={styles.content}>{post.content}</Text>
+
+            <View style={styles.hr} />
+
+            <Text style={styles.sectionTitle}>Comentários</Text>
+            {post.comments?.length ? (
+              <Text style={styles.commentText}>({post.comments.length})</Text>
+            ) : (
+              <Text style={styles.empty}>Nenhum comentário ainda.</Text>
+            )}
+          </View>
+        ) : (
+          <View style={styles.center}>
+            <Text>Post não encontrado.</Text>
+          </View>
+        )}
+      </View>
     </Screen>
   );
 }
 
 function formatDate(iso: string) {
-  // simples e consistente (sem libs)
   try {
     const d = new Date(iso);
     return d.toLocaleDateString();
@@ -143,6 +150,7 @@ const styles = StyleSheet.create({
   hr: { height: 1, backgroundColor: "#E5E7EB", marginVertical: 14 },
 
   content: { fontSize: 16, lineHeight: 22, color: "#111827" },
+  banner: { width: "100%", height: 200, borderRadius: 12, marginBottom: 16 },
 
   sectionTitle: { fontSize: 16, fontWeight: "900", color: "#111827" },
   empty: { marginTop: 8, color: "#6B7280", fontWeight: "600" },
