@@ -1,7 +1,7 @@
 import { Screen } from "@/components/Screen";
 import { getPosts, PostModel } from "@/services/api";
 import { useRouter } from "expo-router";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
 const STATIC_IMAGES = [
@@ -43,10 +43,29 @@ export default function BlogHomeScreen() {
     return STATIC_IMAGES[index % STATIC_IMAGES.length];
   }
 
+  const renderHeader = () => (
+    <View style={styles.headerContent}>
+      <Text style={styles.h1}>Blog Acadêmico</Text>
+      <Text style={styles.subtitle}>Uma coleção de posts de professores e alunos</Text>
+
+      <View style={styles.searchBox}>
+        <Text style={styles.searchIcon}>🔎</Text>
+        <TextInput
+          value={query}
+          onChangeText={setQuery}
+          placeholder="Pesquisar publicação por título..."
+          style={styles.searchInput}
+        />
+      </View>
+
+      <Text style={styles.countText}>{filtered.length} publicações disponíveis</Text>
+    </View>
+  );
+
   return (
     <Screen>
       <View style={styles.page}>
-        {/* “Top bar” estilo web */}
+        {/* "Top bar" estilo web */}
         <View style={styles.topbar}>
           <View style={styles.topbarLeft} />
 
@@ -150,21 +169,6 @@ export default function BlogHomeScreen() {
           )}
         </View>
 
-        <Text style={styles.h1}>Blog Acadêmico</Text>
-        <Text style={styles.subtitle}>Uma coleção de posts de professores e alunos</Text>
-
-        <View style={styles.searchBox}>
-          <Text style={styles.searchIcon}>🔎</Text>
-          <TextInput
-            value={query}
-            onChangeText={setQuery}
-            placeholder="Pesquisar publicação por título..."
-            style={styles.searchInput}
-          />
-        </View>
-
-        <Text style={styles.countText}>{filtered.length} publicações disponíveis</Text>
-
         {loading ? (
           <View style={styles.loading}>
             <ActivityIndicator />
@@ -176,6 +180,7 @@ export default function BlogHomeScreen() {
             numColumns={2}
             columnWrapperStyle={{ gap: 14 }}
             contentContainerStyle={{ paddingBottom: 18 }}
+            ListHeaderComponent={renderHeader}
             renderItem={({ item, index }) => (
               <Pressable
                 style={styles.card}
@@ -270,6 +275,9 @@ const styles = StyleSheet.create({
     color: "#ff0000ff",
   },
 
+  headerContent: {
+    paddingTop: 0,
+  },
   h1: { fontSize: 34, fontWeight: "900", color: "#2563EB", marginTop: 6 },
   subtitle: { color: "#6B7280", marginTop: 6, marginBottom: 14 },
 
