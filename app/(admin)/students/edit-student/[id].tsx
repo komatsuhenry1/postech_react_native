@@ -155,7 +155,7 @@ export default function EditStudentScreen() {
 
 const styles = StyleSheet.create({
     page: { padding: 18, backgroundColor: "#fff", flexGrow: 1 },
-    h1: { fontSize: 34, fontWeight: "900", color: "#2563EB" },
+    h1: { fontSize: 30, fontWeight: "900", color: "#2563EB", textAlign: "center", paddingLeft: 10 },
     subtitle: { marginTop: 6, color: "#6B7280", marginBottom: 16 },
 
     backBtn: { backgroundColor: "#F3F4F6", paddingHorizontal: 10, paddingVertical: 8, borderRadius: 10 },

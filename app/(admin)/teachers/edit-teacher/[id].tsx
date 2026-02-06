@@ -148,7 +148,7 @@ export default function EditTeacherScreen() {
 
 const styles = StyleSheet.create({
     page: { padding: 18, backgroundColor: "#fff", flexGrow: 1 },
-    h1: { fontSize: 34, fontWeight: "900", color: "#2563EB" },
+    h1: { fontSize: 30, fontWeight: "900", color: "#2563EB", textAlign: "center", paddingLeft: 10 },
     subtitle: { marginTop: 6, color: "#6B7280", marginBottom: 16 },
 
     grid: { gap: 14 },
