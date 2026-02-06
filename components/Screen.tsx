@@ -1,9 +1,10 @@
+// components/Screen.tsx
 import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, SafeAreaViewProps } from "react-native-safe-area-context";
 
-export function Screen({ children }: { children: React.ReactNode }) {
+export function Screen({ style, children, ...rest }: SafeAreaViewProps) {
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }} edges={["top", "left", "right"]}>
+    <SafeAreaView style={[{ flex: 1, backgroundColor: "#fff" }, style]} {...rest}>
       {children}
     </SafeAreaView>
   );

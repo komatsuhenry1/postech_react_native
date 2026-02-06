@@ -1,7 +1,7 @@
 import { Screen } from "@/components/Screen";
 import { getPosts, PostModel } from "@/services/api";
 import { useRouter } from "expo-router";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
 const STATIC_IMAGES = [
@@ -65,96 +65,112 @@ export default function BlogHomeScreen() {
   return (
     <Screen>
       <View style={styles.page}>
-        {/* "Top bar" estilo web */}
+        {/* “Top bar” estilo web */}
         <View style={styles.topbar}>
           <View style={styles.topbarLeft} />
 
-          <Text style={styles.brand}>🎓 EduBlog</Text>
+                  <Text style={styles.brand}>🎓 EduBlog</Text>
 
-          <View style={styles.topbarRight}>
-            <Pressable style={styles.menuBtn} onPress={() => setShowMenu(!showMenu)}>
-              <Text style={styles.menuBtnText}>{showMenu ? "✕" : "☰"}</Text>
-            </Pressable>
-          </View>
+                  <View style={styles.topbarRight}>
+                    <Pressable
+                      style={styles.menuBtn}
+                      onPress={() => setShowMenu(!showMenu)}
+                    >
+                      <Text style={styles.menuBtnText}>
+                        {showMenu ? "✕" : "☰"}
+                      </Text>
+                    </Pressable>
+                  </View>
 
-          {showMenu && (
-            <View style={styles.dropdown}>
-              <Pressable
-                style={styles.dropdownItem}
-                onPress={() => {
-                  setShowMenu(false);
-                  router.push("/(admin)/admin-menu");
-                }}
-              >
-                <Text style={styles.dropdownItemText}>Menu</Text>
-              </Pressable>
-              <View style={styles.dropdownSeparator} />
+                  {showMenu && (
+                    <View style={styles.dropdown}>
+                      <Pressable
+                        style={styles.dropdownItem}
+                        onPress={() => {
+                          setShowMenu(false);
+                          router.push("/(admin)/admin-menu");
+                        }}
+                      >
+                        <Text style={styles.dropdownItemText}>Menu</Text>
+                      </Pressable>
 
-              <Pressable
-                style={styles.dropdownItem}
-                onPress={() => {
-                  setShowMenu(false);
-                  router.push("/(admin)/posts/create-post");
-                }}
-              >
-                <Text style={styles.dropdownItemText}>Criar post</Text>
-              </Pressable>
+                      <View style={styles.dropdownSeparator} />
 
-              <Pressable
-                style={styles.dropdownItem}
-                onPress={() => {
-                  setShowMenu(false);
-                  router.push("/(admin)/posts/posts-painel");
-                }}
-              >
-                <Text style={styles.dropdownItemText}>Gerenciar Posts</Text>
-              </Pressable>
+                      <Pressable
+                        style={styles.dropdownItem}
+                        onPress={() => {
+                          setShowMenu(false);
+                          router.push("/(admin)/posts/create-post");
+                        }}
+                      >
+                        <Text style={styles.dropdownItemText}>Criar post</Text>
+                      </Pressable>
 
-              <View style={styles.dropdownSeparator} />
+                      <Pressable
+                        style={styles.dropdownItem}
+                        onPress={() => {
+                          setShowMenu(false);
+                          router.push("/(admin)/posts/posts-painel");
+                        }}
+                      >
+                        <Text style={styles.dropdownItemText}>
+                          Gerenciar Posts
+                        </Text>
+                      </Pressable>
 
-              <Pressable
-                style={styles.dropdownItem}
-                onPress={() => {
-                  setShowMenu(false);
-                  router.push("/(admin)/teachers/create-teacher");
-                }}
-              >
-                <Text style={styles.dropdownItemText}>Criar Professor</Text>
-              </Pressable>
+                      <View style={styles.dropdownSeparator} />
 
-              <Pressable
-                style={styles.dropdownItem}
-                onPress={() => {
-                  setShowMenu(false);
-                  router.push("/(admin)/teachers/teachers-painel");
-                }}
-              >
-                <Text style={styles.dropdownItemText}>Gerenciar Professores </Text>
-              </Pressable>
+                      <Pressable
+                        style={styles.dropdownItem}
+                        onPress={() => {
+                          setShowMenu(false);
+                          router.push("/(admin)/teachers/create-teacher");
+                        }}
+                      >
+                        <Text style={styles.dropdownItemText}>
+                          Criar Professor
+                        </Text>
+                      </Pressable>
 
-              <View style={styles.dropdownSeparator} />
+                      <Pressable
+                        style={styles.dropdownItem}
+                        onPress={() => {
+                          setShowMenu(false);
+                          router.push("/(admin)/teachers/teachers-painel");
+                        }}
+                      >
+                        <Text style={styles.dropdownItemText}>
+                          Gerenciar Professores
+                        </Text>
+                      </Pressable>
 
-              <Pressable
-                style={styles.dropdownItem}
-                onPress={() => {
-                  setShowMenu(false);
-                  router.push("/(admin)/students/create-student");
-                }}
-              >
-                <Text style={styles.dropdownItemText}>Criar Estudante</Text>
-              </Pressable>
+                      <View style={styles.dropdownSeparator} />
 
-              <Pressable
-                style={styles.dropdownItem}
-                onPress={() => {
-                  setShowMenu(false);
-                  router.push("/(admin)/students/students-painel");
-                }}
-              >
-                <Text style={styles.dropdownItemText}>Gerenciar Estudantes</Text>
-              </Pressable>
+                      <Pressable
+                        style={styles.dropdownItem}
+                        onPress={() => {
+                          setShowMenu(false);
+                          router.push("/(admin)/students/create-student");
+                        }}
+                      >
+                        <Text style={styles.dropdownItemText}>
+                          Criar Estudante
+                        </Text>
+                      </Pressable>
 
-              <View style={styles.dropdownSeparator} />
+                      <Pressable
+                        style={styles.dropdownItem}
+                        onPress={() => {
+                          setShowMenu(false);
+                          router.push("/(admin)/students/students-painel");
+                        }}
+                      >
+                        <Text style={styles.dropdownItemText}>
+                          Gerenciar Estudantes
+                        </Text>
+                      </Pressable>
+
+                      <View style={styles.dropdownSeparator} />
 
               <Pressable
                 style={styles.dropdownItem}
@@ -169,6 +185,21 @@ export default function BlogHomeScreen() {
           )}
         </View>
 
+        <Text style={styles.h1}>Blog Acadêmico</Text>
+        <Text style={styles.subtitle}>Uma coleção de posts de professores e alunos</Text>
+
+        <View style={styles.searchBox}>
+          <Text style={styles.searchIcon}>🔎</Text>
+          <TextInput
+            value={query}
+            onChangeText={setQuery}
+            placeholder="Pesquisar publicação por título..."
+            style={styles.searchInput}
+          />
+        </View>
+
+        <Text style={styles.countText}>{filtered.length} publicações disponíveis</Text>
+
         {loading ? (
           <View style={styles.loading}>
             <ActivityIndicator />
@@ -180,7 +211,6 @@ export default function BlogHomeScreen() {
             numColumns={2}
             columnWrapperStyle={{ gap: 14 }}
             contentContainerStyle={{ paddingBottom: 18 }}
-            ListHeaderComponent={renderHeader}
             renderItem={({ item, index }) => (
               <Pressable
                 style={styles.card}
@@ -188,9 +218,13 @@ export default function BlogHomeScreen() {
               >
                 <Image source={getPostImage(index)} style={styles.cardCover} />
 
-                <Text numberOfLines={2} style={styles.cardTitle}>{item.title}</Text>
-                <Text style={styles.cardMeta}>By {item.author}</Text>
-                <Text numberOfLines={2} style={styles.cardContent}>{item.content}</Text>
+                <Text numberOfLines={2} style={styles.cardTitle}>
+                  {item.title}
+                </Text>
+                {/* <Text style={styles.cardMeta}>By {item.author}</Text> */}
+                <Text numberOfLines={2} style={styles.cardContent}>
+                  {item.content}
+                </Text>
 
                 <View style={styles.readMoreRow}>
                   <Text style={styles.readMore}>Ler mais →</Text>
@@ -206,6 +240,7 @@ export default function BlogHomeScreen() {
 
 const styles = StyleSheet.create({
   page: { flex: 1, backgroundColor: "#fff", padding: 18 },
+
   topbar: {
     borderWidth: 1,
     borderColor: "#E5E7EB",
@@ -274,6 +309,12 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#ff0000ff",
   },
+  dropdownSeparator: {
+    height: 1,
+    width: "100%",
+    backgroundColor: "#E5E7EB",
+    marginVertical: 6,
+  },
 
   headerContent: {
     paddingTop: 0,
@@ -311,17 +352,24 @@ const styles = StyleSheet.create({
     width: "100%",
   },
 
-  dropdownSeparator: {
-  height: 1,
-  width: "100%",
-  backgroundColor: "#E5E7EB",
-  marginVertical: 6,
-},
-
-
-  cardTitle: { fontSize: 16, fontWeight: "800", paddingHorizontal: 12, paddingTop: 10 },
-  cardMeta: { color: "#6B7280", paddingHorizontal: 12, paddingTop: 4, fontWeight: "600" },
-  cardContent: { color: "#374151", paddingHorizontal: 12, paddingTop: 6, paddingBottom: 10 },
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: "800",
+    paddingHorizontal: 12,
+    paddingTop: 10,
+  },
+  cardMeta: {
+    color: "#6B7280",
+    paddingHorizontal: 12,
+    paddingTop: 4,
+    fontWeight: "600",
+  },
+  cardContent: {
+    color: "#374151",
+    paddingHorizontal: 12,
+    paddingTop: 6,
+    paddingBottom: 10,
+  },
   readMoreRow: { paddingHorizontal: 12, paddingBottom: 12 },
   readMore: { color: "#2563EB", fontWeight: "800" },
 });
