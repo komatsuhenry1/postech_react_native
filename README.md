@@ -1,50 +1,104 @@
-# Welcome to your Expo app 👋
+# Clima Tempo - Mobile Application
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Bem-vindo ao repositório do aplicativo móvel **Clima Tempo**. Este projeto é desenvolvido com **React Native** utilizando **Expo** e **Expo Router**, focado em fornecer uma experiência moderna e eficiente para consulta de informações climáticas e interação social através de posts.
 
-## Get started
+## 🚀 Tecnologias Utilizadas
 
-1. Install dependencies
+O projeto utiliza as seguintes tecnologias e bibliotecas principais:
 
-   ```bash
-   npm install
-   ```
+- **[React Native](https://reactnative.dev/)**: Framework para desenvolvimento de aplicativos móveis nativos.
+- **[Expo](https://expo.dev/)**: Plataforma e conjunto de ferramentas para React Native.
+- **[Expo Router](https://docs.expo.dev/router/introduction)**: Sistema de roteamento baseado em arquivos (semelhante ao Next.js).
+- **[TypeScript](https://www.typescriptlang.org/)**: Superset de JavaScript que adiciona tipagem estática.
+- **Async Storage**: Armazenamento local para persistência de dados (tokens, roles).
 
-2. Start the app
+## 📋 Pré-requisitos
 
-   ```bash
-   npx expo start
-   ```
+Antes de começar, certifique-se de ter o ambiente configurado:
 
-In the output, you'll find options to open the app in a
+1.  **Node.js** (versão 18 ou superior recomendada).
+2.  **npm** ou **yarn**.
+3.  Um emulador Android/iOS configurado ou o app **Expo Go** instalado no seu dispositivo físico.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## 🛠️ Instalação e Configuração
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+Siga os passos abaixo para rodar o projeto localmente:
 
-## Get a fresh project
-
-When you're ready, run:
+### 1. Clonar o repositório
 
 ```bash
-npm run reset-project
+git clone <URL_DO_REPOSITORIO>
+cd clima-tempo
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Instalar dependências
 
-## Learn more
+Utilize o `npm` para instalar as bibliotecas necessárias:
 
-To learn more about developing your project with Expo, look at the following resources:
+```bash
+npm install
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### 3. Configurar Variáveis de Ambiente
 
-## Join the community
+Crie um arquivo `.env` na raiz do projeto para configurar a URL da API. Você pode usar o arquivo de exemplo ou criar do zero:
 
-Join our community of developers creating universal apps.
+**Arquivo `.env`:**
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```env
+EXPO_PUBLIC_API_URL=http://localhost:3000
+# Nota: Para emuladores Android, use http://10.0.2.2:3000
+# Para usar no dispositivo físico, use o IP da sua máquina na rede local (ex: http://192.168.1.5:3000)
+```
+
+## 🏗️ Arquitetura da Aplicação
+
+A arquitetura do projeto segue o padrão modular facilitado pelo Expo Router e separação de responsabilidades.
+
+### Estrutura de Pastas
+
+- **`app/`**: Contém as telas e a lógica de roteamento.
+    - **`(auth)/`**: Grupo de rotas protegidas ou relacionadas à autenticação (Login, Registro).
+    - **`(admin)/`**: Rotas administrativas (se houver).
+    - **`(user)/`**: Rotas acessíveis para usuários comuns.
+    - **`_layout.tsx`**: Define o layout global e configurações de navegação (Stack, Tabs).
+    - **`index.tsx`**: Ponto de entrada inicial (redirecionamento ou tela Home).
+
+- **`services/`**: Camada de comunicação com a API externa.
+    - **`api.ts`**: Centraliza todas as chamadas HTTP (Login, Cadastro, Posts), utilizando `fetch` e tratando erros.
+
+- **`components/`**: Componentes reutilizáveis da UI (Botões, Inputs, Cards).
+
+- **`assets/`**: Imagens, fontes e outros recursos estáticos.
+
+### Fluxo de Dados e Autenticação
+
+1.  **Autenticação**: O usuário realiza login/cadastro via `services/api.ts`.
+2.  **Persistência**: O `role` (papel do usuário) é salvo no `AsyncStorage` para controle de acesso.
+3.  **API**: As requisições para a API incluem o `role` no Header quando necessário para autorização no backend.
+
+## ▶️ Como Executar
+
+Após configurar o ambiente, inicie o servidor de desenvolvimento:
+
+```bash
+npx expo start
+```
+ou
+```bash
+npm start
+```
+
+### Opções de Execução:
+- **Pressione `a`**: Para abrir no emulador Android.
+- **Pressione `i`**: Para abrir no simulador iOS (apenas macOS).
+- **Pressione `w`**: Para abrir no navegador web.
+- **Escaneie o QR Code**: Com o app **Expo Go** no seu celular para testar no dispositivo físico.
+
+## 📚 Documentação Adicional
+
+- [Documentação do Expo](https://docs.expo.dev/)
+- [Documentação do React Native](https://reactnative.dev/docs/getting-started)
+- [Guia do Expo Router](https://docs.expo.dev/router/introduction)
+
+---
